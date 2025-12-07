@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link } from "react-router";
 import Container from "../Shared/Container";
+import { AuthContext } from "../../providers/AuthContext";
+import useAuth from "../../Hooks/useAuth";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-
+  // const { user } = use(AuthContext);
+  const { user } = useAuth();
+  console.log(user);
   return (
     <Container>
       <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50">
