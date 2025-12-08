@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const axiosSecure = useAxiosSecure();
   const handleLogin = (data) => {
     console.log("hiii");
     console.log(data);
@@ -28,6 +30,18 @@ const Login = () => {
     googleSignUser()
       .then((result) => {
         console.log(result.user);
+        const userInfo = {
+          email: result.user.email,
+          displayName: result.user.name,
+          photoURL: result.user.photoURL,
+          userRole: "user",
+        };
+
+        axiosSecure.post("/user", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            console.log("user added data DB");
+          }
+        });
         navigate(location?.state, "/");
       })
       .catch((err) => {
