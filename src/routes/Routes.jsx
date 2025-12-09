@@ -3,6 +3,7 @@ import MainLayOut from "../LayOut/MainLayOut/MainLayOut";
 import Login from "../Pages/Login/Login";
 import Home from "../Pages/Home/Home";
 import Register from "../Pages/Register/Register";
+import AllProducts from "../Pages/AllProducts/AllProducts";
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
+      },
+      {
+        path: "/all-products",
+        Component: AllProducts,
       },
     ],
   },

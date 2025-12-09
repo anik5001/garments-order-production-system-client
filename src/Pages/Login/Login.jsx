@@ -29,6 +29,7 @@ const Login = () => {
   const handleGoogleSign = () => {
     googleSignUser()
       .then((result) => {
+        navigate(location?.state, "/");
         console.log(result.user);
         const userInfo = {
           email: result.user.email,
@@ -42,7 +43,6 @@ const Login = () => {
             console.log("user added data DB");
           }
         });
-        navigate(location?.state, "/");
       })
       .catch((err) => {
         console.log(err);
