@@ -6,6 +6,7 @@ import Register from "../Pages/Register/Register";
 import AllProducts from "../Pages/AllProducts/AllProducts";
 import PrivateRouter from "./PrivateRouter";
 import ProductDetails from "../Pages/ProductDetails/ProductDetails";
+import BookingForm from "../Pages/BookingForm/BookingForm";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRouter>
             <ProductDetails></ProductDetails>
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/booking-product/:id",
+        element: (
+          <PrivateRouter>
+            <BookingForm></BookingForm>
           </PrivateRouter>
         ),
       },

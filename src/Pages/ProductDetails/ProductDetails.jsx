@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Loading from "../../components/LoadingSpinner/Loading";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 // Create or use a loading component
 
 const ProductDetails = () => {
@@ -185,12 +185,13 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <div className="space-y-4">
-              <button
+              <Link
+                to={`/booking-product/${id}`}
                 onClick={() => setShowBooking(!showBooking)}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
               >
                 Place Order
-              </button>
+              </Link>
 
               {/* <button
                 onClick={() => navigate("/contact")}
