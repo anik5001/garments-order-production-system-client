@@ -7,6 +7,8 @@ import AllProducts from "../Pages/AllProducts/AllProducts";
 import PrivateRouter from "./PrivateRouter";
 import ProductDetails from "../Pages/ProductDetails/ProductDetails";
 import BookingForm from "../Pages/BookingForm/BookingForm";
+import DashboardLayout from "../LayOut/DashBoardLayout/DashboardLayout";
+import AddProduct from "../components/Form/AddProduct";
 
 export const router = createBrowserRouter([
   {
@@ -46,5 +48,15 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     Component: Register,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout></DashboardLayout>,
+    children: [
+      {
+        path: "/dashboard/add-product",
+        element: <AddProduct></AddProduct>,
+      },
+    ],
   },
 ]);

@@ -54,7 +54,7 @@ const QuickStatsCTA = () => {
               products.
             </p>
 
-            <div className="flex gap-3">
+            <div className="">
               <a href="/register" className="btn btn-primary w-full">
                 Get Started
               </a>

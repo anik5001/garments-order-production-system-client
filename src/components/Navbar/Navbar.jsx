@@ -5,10 +5,19 @@ import { AuthContext } from "../../providers/AuthContext";
 import useAuth from "../../Hooks/useAuth";
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // const [isLoggedIn, setIsLoggedIn] = useState(true);
   // const { user } = use(AuthContext);
-  const { user } = useAuth();
+  const { user, signOutUser } = useAuth();
   console.log(user);
+  const handleSignOutUser = () => {
+    signOutUser()
+      .then(() => {
+        alert("user signOut successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Container>
       <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50">
@@ -38,7 +47,7 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
-              {!isLoggedIn ? (
+              {!user ? (
                 <>
                   <li>
                     <Link to="/">Home</Link>
@@ -72,7 +81,7 @@ const Navbar = () => {
                   </li>
                   <li>
                     <button
-                      onClick={() => setIsLoggedIn(false)}
+                      onClick={handleSignOutUser}
                       className="btn btn-error btn-sm mt-2"
                     >
                       Logout
@@ -92,7 +101,7 @@ const Navbar = () => {
         {/* Navbar Center (Desktop Menu) */}
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 gap-2">
-            {!isLoggedIn ? (
+            {!user ? (
               <>
                 <li>
                   <Link to="/">Home</Link>
@@ -131,17 +140,17 @@ const Navbar = () => {
 
         {/* Navbar End (Avatar + Logout) */}
         <div className="navbar-end">
-          {isLoggedIn ? (
+          {user ? (
             <>
               <div className="avatar mr-3">
                 <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                  <img src="https://i.pravatar.cc/100" alt="User" />
+                  <img src={user?.photoURL} alt="User" />
                 </div>
               </div>
 
               <button
+                onClick={handleSignOutUser}
                 className="btn btn-outline btn-error btn-sm"
-                onClick={() => setIsLoggedIn(false)}
               >
                 Logout
               </button>
