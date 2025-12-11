@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router";
 
 const ProductCard = ({ product }) => {
-  const { _id, productName, category, price, quantity, image } = product;
+  const { _id, productName, category, price, quantity, images } = product;
 
   return (
     <div className="card bg-base-100 shadow-xl border p-3 hover:shadow-2xl transition-all duration-200 rounded-xl">
       <figure className="h-48 w-full overflow-hidden rounded-lg">
         <img
-          src={image}
+          src={images}
           alt={productName}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
         />

@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import axios from "axios";
 import { toast } from "react-hot-toast";
+
+const categories = [
+  "T-Shirt",
+  "Hoodie",
+  "Polo Shirt",
+  "Denim",
+  "Sportswear",
+  "Kids Wear",
+];
+
+const paymentOptionsList = ["cash-on-delivery", "payfast"];
 
 const AddProduct = () => {
   const axiosSecure = useAxiosSecure();
+  const [uploading, setUploading] = useState(false);
 
   const {
     register,
@@ -14,45 +27,77 @@ const AddProduct = () => {
     formState: { errors },
   } = useForm();
 
-  // ------------------ TANSTACK MUTATION ------------------
+  // ------------------ PRODUCT CREATE MUTATION ------------------
   const mutation = useMutation({
-    mutationFn: async (newProduct) => {
-      const res = await axiosSecure.post("/products", newProduct);
+    mutationFn: async (product) => {
+      const res = await axiosSecure.post("/products", product);
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Product added successfully!");
+      toast.success("Product created successfully!");
       reset();
     },
-    onError: () => {
-      toast.error("Failed to add product!");
-    },
+    onError: () => toast.error("Failed to create product!"),
   });
 
+  // ------------------ HANDLE IMAGE UPLOAD ------------------
+  const handleImageUpload = async (images) => {
+    setUploading(true);
+
+    const imageUrls = [];
+
+    for (let img of images) {
+      const formData = new FormData();
+      formData.append("image", img);
+
+      const imageApi = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_IMAGE_HOST_key
+      }`;
+
+      const res = await axios.post(imageApi, formData);
+
+      if (res.data?.data?.url) {
+        imageUrls.push(res.data.data.url);
+      }
+    }
+
+    setUploading(false);
+    return imageUrls;
+  };
+
   // ------------------ FORM SUBMIT ------------------
-  const onSubmit = (data) => {
-    const productData = {
-      productName: data.productName,
-      description: data.description,
-      category: data.category,
-      price: Number(data.price),
-      quantity: Number(data.quantity),
-      minOrder: Number(data.minOrder),
+  const onSubmit = async (data) => {
+    try {
+      // 1. Upload images
+      const selectedImages = data.images;
+      const uploadedImages = await handleImageUpload(selectedImages);
 
-      // Convert comma-separated images into array
-      images: data.images.split(",").map((img) => img.trim()),
+      // 2. Create product object
+      const productData = {
+        productName: data.productName,
+        description: data.description,
+        category: data.category,
+        price: Number(data.price),
+        quantity: Number(data.quantity),
+        minOrder: Number(data.minOrder),
 
-      video: data.video || "",
+        images: uploadedImages,
+        video: data.video || "",
 
-      paymentOptions: data.paymentOptions
-        ? data.paymentOptions.split(",").map((p) => p.trim())
-        : ["cash-on-delivery"],
+        paymentOptions: data.paymentOptions
+          ? data.paymentOptions
+          : ["cash-on-delivery"],
 
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-    mutation.mutate(productData);
+      // 3. Save to database
+      mutation.mutate(productData);
+    } catch (error) {
+      toast.error("Image upload failed!");
+      console.log(error);
+    }
   };
 
   return (
@@ -70,9 +115,6 @@ const AddProduct = () => {
               required: "Product name is required",
             })}
           />
-          {errors.productName && (
-            <p className="text-red-500 text-sm">{errors.productName.message}</p>
-          )}
         </div>
 
         {/* Description */}
@@ -85,23 +127,22 @@ const AddProduct = () => {
               required: "Description is required",
             })}
           ></textarea>
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
         </div>
 
-        {/* Category */}
+        {/* Category Select */}
         <div>
           <label className="font-semibold">Category</label>
-          <input
-            type="text"
-            placeholder="T-Shirt / Hoodie / Denim"
-            className="input input-bordered w-full mt-2"
-            {...register("category", { required: "Category is required" })}
-          />
-          {errors.category && (
-            <p className="text-red-500 text-sm">{errors.category.message}</p>
-          )}
+          <select
+            className="select select-bordered w-full mt-2"
+            {...register("category", { required: "Select a category" })}
+          >
+            <option value="">Select Category</option>
+            {categories.map((c, i) => (
+              <option value={c} key={i}>
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Price */}
@@ -130,23 +171,24 @@ const AddProduct = () => {
           <input
             type="number"
             className="input input-bordered w-full mt-2"
-            {...register("minOrder", { required: "Min order is required" })}
+            {...register("minOrder", { required: "Minimum order is required" })}
           />
         </div>
 
-        {/* Images */}
+        {/* Images Upload */}
         <div>
           <label className="font-semibold">Product Images</label>
           <input
-            type="text"
-            placeholder="Comma separated image URLs"
-            className="input input-bordered w-full mt-2"
+            type="file"
+            multiple
+            accept="image/*"
+            className="file-input file-input-bordered w-full mt-2"
             {...register("images", {
-              required: "At least one image URL is required",
+              required: "Upload at least one image",
             })}
           />
-          <p className="text-gray-500 text-sm">
-            Example: https://img1.jpg, https://img2.jpg
+          <p className="text-sm text-gray-500 mt-1">
+            You can upload multiple images.
           </p>
         </div>
 
@@ -161,27 +203,36 @@ const AddProduct = () => {
           />
         </div>
 
-        {/* Payment Options */}
+        {/* Payment Options Select */}
         <div>
           <label className="font-semibold">Payment Options</label>
-          <input
-            type="text"
-            placeholder="cash-on-delivery, payfast"
-            className="input input-bordered w-full mt-2"
+
+          <select
+            multiple
+            className="select select-bordered w-full mt-2 h-24"
             {...register("paymentOptions")}
-          />
-          <p className="text-gray-500 text-sm">
-            If empty → default = cash-on-delivery
-          </p>
+          >
+            {paymentOptionsList.map((p, i) => (
+              <option key={i} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+
+          <p className="text-sm text-gray-500"></p>
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
+          disabled={mutation.isPending || uploading}
           className="btn btn-primary w-full mt-4"
-          disabled={mutation.isPending}
         >
-          {mutation.isPending ? "Adding Product..." : "Add Product"}
+          {uploading
+            ? "Uploading Images..."
+            : mutation.isPending
+            ? "Adding Product..."
+            : "Add Product"}
         </button>
       </form>
     </section>
