@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../Hooks/useAuth";
+import axios from "axios";
 
 const BookingForm = () => {
   const { user } = useAuth();
@@ -75,11 +76,16 @@ const BookingForm = () => {
     };
     console.log(bookingInfo);
     // Payment Logic
-    // if (bookingInfo.paymentMethod === "payfast") {
-    //   localStorage.setItem("payment-data", JSON.stringify(bookingInfo));
-    //   navigate("/payment"); // redirect to payment
-    //   return;
-    // }
+    if (bookingInfo.paymentMethod === "payfast") {
+      const { data } = await axios.post(
+        "http://localhost:3000/create-checkout-session",
+        bookingInfo
+      );
+      window.location.href = data.url;
+      // console.log(data.url);
+      // navigate("/payment"); // redirect to payment
+      return;
+    }
 
     // Cash on Delivery → save directly
     fetch("http://localhost:3000/order-booking", {
@@ -90,7 +96,7 @@ const BookingForm = () => {
       .then((res) => res.json())
       .then(() => {
         alert("Booking placed successfully!");
-        navigate("/dashboard/my-orders");
+        // navigate("/dashboard/my-orders");
       });
   };
 

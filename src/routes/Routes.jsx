@@ -9,6 +9,7 @@ import ProductDetails from "../Pages/ProductDetails/ProductDetails";
 import BookingForm from "../Pages/BookingForm/BookingForm";
 import DashboardLayout from "../LayOut/DashBoardLayout/DashboardLayout";
 import AddProduct from "../components/Form/AddProduct";
+import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
             <BookingForm></BookingForm>
           </PrivateRouter>
         ),
+      },
+      {
+        path: "/payment-success",
+        Component: PaymentSuccess,
       },
     ],
   },
