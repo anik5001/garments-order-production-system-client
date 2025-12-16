@@ -63,6 +63,8 @@ const Sidebar = () => {
             {/*  Menu Items */}
             <nav>
               <Link to="/dashboard/add-product">Add Product</Link>
+              <br />
+              <Link to="/dashboard/my-orders">My Order</Link>
               {/* Common Menu */}
               {/* <MenuItem
                 icon={BsGraphUp}
@@ -80,7 +82,7 @@ const Sidebar = () => {
           <div>
             <hr />
 
-            {/* <MenuItem
+            {/* <menuitem
               icon={FcSettings}
               label="Profile"
               address="/dashboard/profile"

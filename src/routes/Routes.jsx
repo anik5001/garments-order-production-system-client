@@ -10,6 +10,7 @@ import BookingForm from "../Pages/BookingForm/BookingForm";
 import DashboardLayout from "../LayOut/DashBoardLayout/DashboardLayout";
 import AddProduct from "../components/Form/AddProduct";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
+import MyOrders from "../components/DashBoard/Buyer/MyOrders";
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/add-product",
         element: <AddProduct></AddProduct>,
+      },
+      {
+        path: "my-orders",
+        element: <MyOrders></MyOrders>,
       },
     ],
   },
