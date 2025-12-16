@@ -29,20 +29,20 @@ const Login = () => {
   const handleGoogleSign = () => {
     googleSignUser()
       .then((result) => {
-        navigate(location?.state, "/");
         console.log(result.user);
         const userInfo = {
           email: result.user.email,
-          displayName: result.user.name,
+          displayName: result.user.displayName,
           photoURL: result.user.photoURL,
           userRole: "user",
         };
-
+        console.log(userInfo);
         axiosSecure.post("/user", userInfo).then((res) => {
           if (res.data.insertedId) {
             console.log("user added data DB");
           }
         });
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);

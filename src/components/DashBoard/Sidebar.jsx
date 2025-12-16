@@ -65,6 +65,12 @@ const Sidebar = () => {
               <Link to="/dashboard/add-product">Add Product</Link>
               <br />
               <Link to="/dashboard/my-orders">My Order</Link>
+              <br />
+              <Link to="/dashboard/all-products">All Products</Link>
+              <br />
+              <Link to="/dashboard/all-orders">All Orders</Link>
+              <br />
+              <Link to="/dashboard/manage-users">All users</Link>
               {/* Common Menu */}
               {/* <MenuItem
                 icon={BsGraphUp}

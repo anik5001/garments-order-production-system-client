@@ -60,7 +60,7 @@ const Register = () => {
             updateProfileUser(userProfile)
               .then(() => {
                 console.log("success full update profile");
-                // navigate(location?.state || "/");
+                navigate(location?.state || "/");
               })
               .catch((err) => {
                 console.log(err);

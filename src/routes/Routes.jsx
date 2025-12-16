@@ -11,6 +11,9 @@ import DashboardLayout from "../LayOut/DashBoardLayout/DashboardLayout";
 import AddProduct from "../components/Form/AddProduct";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import MyOrders from "../components/DashBoard/Buyer/MyOrders";
+import AllProduct from "../components/DashBoard/Admin/AllProducts/AllProduct";
+import AllOrders from "../components/DashBoard/Admin/AllOrders/AllOrders";
+import ManageUsers from "../components/DashBoard/Admin/ManageUsers/ManageUsers";
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +69,18 @@ export const router = createBrowserRouter([
       {
         path: "my-orders",
         element: <MyOrders></MyOrders>,
+      },
+      {
+        path: "all-products",
+        element: <AllProduct></AllProduct>,
+      },
+      {
+        path: "all-orders",
+        element: <AllOrders></AllOrders>,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUsers></ManageUsers>,
       },
     ],
   },

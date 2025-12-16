@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import useAuth from "../../Hooks/useAuth";
 
 const categories = [
   "T-Shirt",
@@ -17,6 +18,7 @@ const categories = [
 const paymentOptionsList = ["cash-on-delivery", "payfast"];
 
 const AddProduct = () => {
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [uploading, setUploading] = useState(false);
 
@@ -90,6 +92,7 @@ const AddProduct = () => {
 
         createdAt: new Date(),
         updatedAt: new Date(),
+        createdBy: user?.email,
       };
 
       // 3. Save to database
