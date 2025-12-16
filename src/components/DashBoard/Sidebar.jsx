@@ -62,8 +62,6 @@ const Sidebar = () => {
           <div className="flex flex-col justify-between flex-1 mt-6">
             {/*  Menu Items */}
             <nav>
-              <Link to="/dashboard/add-product">Add Product</Link>
-              <br />
               <Link to="/dashboard/my-orders">My Order</Link>
               <br />
               <Link to="/dashboard/all-products">All Products</Link>
@@ -71,6 +69,15 @@ const Sidebar = () => {
               <Link to="/dashboard/all-orders">All Orders</Link>
               <br />
               <Link to="/dashboard/manage-users">All users</Link>
+              <br />
+              <Link to="/dashboard/add-product">Add Product</Link>
+              <br />
+              <Link to="/dashboard/manage-products">Manage Products</Link>
+              <br />
+              <Link to="/dashboard/pending-orders">Pending Orders</Link>
+              <br />
+              <Link to="/dashboard/approved-orders">Approved Orders</Link>{" "}
+              <br />
               {/* Common Menu */}
               {/* <MenuItem
                 icon={BsGraphUp}
