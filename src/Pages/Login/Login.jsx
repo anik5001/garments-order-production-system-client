@@ -49,11 +49,13 @@ const Login = () => {
       });
   };
   return (
-    <div>
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+    <div className="">
+      <div className="card bg-base-100  max-w-sm mx-auto shrink-0 shadow-2xl">
         <div className="card-body">
           <h1 className="text-4xl font-bold">Welcome Back</h1>
-          <p className="mb-3 text-gray-600">Login with ZapShift</p>
+          <p className="mb-3 text-gray-600">
+            Login with Garments Order and Tracking System
+          </p>
           <form onSubmit={handleSubmit(handleLogin)}>
             <fieldset className="fieldset">
               <label className="label">Email</label>

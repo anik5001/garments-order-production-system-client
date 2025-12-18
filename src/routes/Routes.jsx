@@ -17,6 +17,7 @@ import ManageUsers from "../components/DashBoard/Admin/ManageUsers/ManageUsers";
 import ManageProducts from "../components/DashBoard/Manager/ManageProducts/ManageProducts";
 import PendingOrders from "../components/DashBoard/Manager/PendingOrders/PendingOrders";
 import ApproveOrders from "../components/DashBoard/Manager/ApproveOrders/ApproveOrders";
+import Profile from "../components/DashBoard/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ export const router = createBrowserRouter([
       {
         path: "approved-orders",
         element: <ApproveOrders></ApproveOrders>,
+      },
+      {
+        path: "profile",
+        element: <Profile></Profile>,
       },
     ],
   },

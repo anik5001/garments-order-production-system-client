@@ -60,7 +60,7 @@ const Register = () => {
             updateProfileUser(userProfile)
               .then(() => {
                 console.log("success full update profile");
-                navigate(location?.state || "/");
+                navigate("/");
               })
               .catch((err) => {
                 console.log(err);
@@ -76,10 +76,12 @@ const Register = () => {
   };
   return (
     <div>
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+      <div className="card bg-base-100  max-w-sm mx-auto shrink-0 shadow-2xl">
         <div className="card-body">
           <h1 className="text-4xl font-bold">Create an Account</h1>
-          <p className="mb-3 text-gray-600">Register with ZapShift</p>
+          <p className="mb-3 text-gray-600">
+            Register with Garments Order and Tracking System
+          </p>
           <form onSubmit={handleSubmit(registerHandler)}>
             <fieldset className="fieldset">
               {/* Name */}
@@ -118,13 +120,13 @@ const Register = () => {
               )}
               <label className="label"> Role</label>
               <select
-                defaultValue="Pick a color"
+                defaultValue="Pick a role"
                 className="select"
                 {...register("role")}
               >
                 <option disabled={true}>Pick a color</option>
                 <option value="Manager">Manager</option>
-                <option value="Buyer">buyer</option>
+                <option value="Buyer">Buyer</option>
                 {/* <option value="">Velvet</option> */}
               </select>
               <label className="label">Password</label>
@@ -157,7 +159,7 @@ const Register = () => {
               <div>
                 <a className="link link-hover">Forgot password?</a>
               </div>
-              <button className="btn btn-primary text-black mt-4">
+              <button className="btn btn-primary text-white mt-4">
                 Register
               </button>
             </fieldset>

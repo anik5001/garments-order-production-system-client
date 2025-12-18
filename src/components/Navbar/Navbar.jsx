@@ -1,5 +1,5 @@
 import React, { use, useState } from "react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import Container from "../Shared/Container";
 import { AuthContext } from "../../providers/AuthContext";
 import useAuth from "../../Hooks/useAuth";
@@ -50,34 +50,34 @@ const Navbar = () => {
               {!user ? (
                 <>
                   <li>
-                    <Link to="/">Home</Link>
+                    <NavLink to="/">Home</NavLink>
                   </li>
                   <li>
-                    <Link to="/all-products">All-Products</Link>
+                    <NavLink to="/all-products">All-Products</NavLink>
                   </li>
                   <li>
-                    <Link to="/about">About Us</Link>
+                    <NavLink to="/about">About Us</NavLink>
                   </li>
                   <li>
-                    <Link to="/contact">Contact</Link>
+                    <NavLink to="/contact">Contact</NavLink>
                   </li>
                   <li>
-                    <Link to="/login">Login</Link>
+                    <NavLink to="/login">Login</NavLink>
                   </li>
                   <li>
-                    <Link to="/register">Register</Link>
+                    <NavLink to="/register">Register</NavLink>
                   </li>
                 </>
               ) : (
                 <>
                   <li>
-                    <Link to="/">Home</Link>
+                    <NavLink to="/">Home</NavLink>
                   </li>
                   <li>
-                    <Link to="/all-products">All-Products</Link>
+                    <NavLink to="/all-products">All-Products</NavLink>
                   </li>
                   <li>
-                    <Link to="/dashboard">Dashboard</Link>
+                    <NavLink to="/dashboard">Dashboard</NavLink>
                   </li>
                   <li>
                     <button
@@ -104,34 +104,34 @@ const Navbar = () => {
             {!user ? (
               <>
                 <li>
-                  <Link to="/">Home</Link>
+                  <NavLink to="/">Home</NavLink>
                 </li>
                 <li>
-                  <Link to="/all-products">All-Products</Link>
+                  <NavLink to="/all-products">All-Products</NavLink>
                 </li>
                 <li>
-                  <Link to="/about">About Us</Link>
+                  <NavLink to="/about">About Us</NavLink>
                 </li>
                 <li>
-                  <Link to="/contact">Contact</Link>
+                  <NavLink to="/contact">Contact</NavLink>
                 </li>
                 <li>
-                  <Link to="/login">Login</Link>
+                  <NavLink to="/login">Login</NavLink>
                 </li>
                 <li>
-                  <Link to="/register">Register</Link>
+                  <NavLink to="/register">Register</NavLink>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link to="/">Home</Link>
+                  <NavLink to="/">Home</NavLink>
                 </li>
                 <li>
-                  <Link to="/all-products">All-Products</Link>
+                  <NavLink to="/all-products">All-Products</NavLink>
                 </li>
                 <li>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <NavLink to="/dashboard">Dashboard</NavLink>
                 </li>
               </>
             )}

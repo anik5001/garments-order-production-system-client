@@ -1,13 +1,15 @@
 import React from "react";
 import useAuth from "../Hooks/useAuth";
-import { Navigate, NavLink } from "react-router";
+import { Navigate, NavLink, useLocation } from "react-router";
+import Loading from "../components/LoadingSpinner/Loading";
 
 const PrivateRouter = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div className="text-center my-10">loading..</div>;
+  const location = useLocation();
 
-  if (!user) return <NavLink to="/login"></NavLink>;
-  return children;
+  if (loading) return <Loading />;
+  if (user) return children;
+  return <Navigate to="/login" state={location.pathname} replace="true" />;
 };
 
 export default PrivateRouter;
