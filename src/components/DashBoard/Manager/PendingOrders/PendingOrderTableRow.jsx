@@ -1,6 +1,11 @@
 import React from "react";
+import { Link, useNavigate } from "react-router";
+import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const PendingOrderTableRow = ({ order }) => {
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const {
     _id,
     customerName,
@@ -10,6 +15,18 @@ const PendingOrderTableRow = ({ order }) => {
 
     createdAt,
   } = order || {};
+
+  const updatedOrderStatus = (id, status) => {
+    const updatedInfo = { status: status, approvedAt: new Date() };
+    axiosSecure.patch(`/order-update/${id}`, updatedInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        toast.success(`${status} Successful`);
+      }
+    });
+  };
+  const orderApprovedHandle = (id) => {
+    updatedOrderStatus(id, "Approved");
+  };
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -37,19 +54,32 @@ const PendingOrderTableRow = ({ order }) => {
         <p className="text-gray-900">{orderQty}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">${createdAt}</p>
+        <p className="text-gray-900">{createdAt}</p>
       </td>
 
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <td className=" border-gray-200 bg-white text-sm">
         <button
           // onClick={() => setIsOpen(true)}
-          className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-lime-900 leading-tight"
+          className="relative   disabled:cursor-not-allowed cursor-pointer inline-block px-1 py-1 font-semibold text-lime-900 leading-tight"
         >
-          <span className="absolute cursor-pointer inset-0 bg-red-200 opacity-50 rounded-full"></span>
-          <span className="relative cursor-pointer">Cancel</span>
+          <span
+            onClick={() => {
+              orderApprovedHandle(_id);
+            }}
+            className="btn btn-primary relative cursor-pointer"
+          >
+            Approve
+          </span>
+          <span className="btn btn-secondary relative cursor-pointer">
+            Reject
+          </span>
+          <Link
+            to={`/dashboard/order-details/${_id}`}
+            className="btn relative cursor-pointer"
+          >
+            View{" "}
+          </Link>
         </button>
-
-        {/* <DeleteModal isOpen={isOpen} closeModal={closeModal} /> */}
       </td>
     </tr>
   );

@@ -14,7 +14,7 @@ const ManageProducts = () => {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/products");
+      const res = await axiosSecure.get("/my-products");
       return res.data;
     },
   });
@@ -22,7 +22,7 @@ const ManageProducts = () => {
   // Delete mutation (v5)
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await axiosSecure.delete(`/products/${id}`);
+      const res = await axiosSecure.delete(`/delete-product/${id}`);
       return res.data;
     },
     onSuccess: () => {
@@ -81,7 +81,7 @@ const ManageProducts = () => {
               <ManageProductTableRow
                 key={product._id}
                 product={product}
-                onDelete={handleDelete}
+                handleDelete={handleDelete}
               />
             ))}
           </tbody>

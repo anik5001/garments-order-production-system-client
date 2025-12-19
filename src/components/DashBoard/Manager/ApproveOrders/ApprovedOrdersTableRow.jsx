@@ -1,55 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
+import TrackingModal from "./TrackingModal";
+import ViewTrackingModal from "./ViewTrackingModal";
 
-const ApprovedOrdersTableRow = ({ order }) => {
+const ApprovedOrdersTableRow = ({ order, refetch }) => {
+  const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
   const {
     _id,
     customerName,
     productName,
-
     orderQty,
-
     createdAt,
+    trackingHistory,
   } = order || {};
+
   return (
     <tr>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex items-center">
-          <div className="shrink-0">
-            <div className="block relative">
-              {_id}
-              {/* <img
-                alt="profile"
-                src={image}
-                className="mx-auto object-cover rounded h-10 w-15 "
-              /> */}
-            </div>
-          </div>
-        </div>
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-mono text-xs">
+        {_id}
       </td>
-
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         {customerName}
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{productName}</p>
+        <p className="text-gray-900 font-medium">{productName}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{orderQty}</p>
+        <span className="badge badge-ghost">{orderQty}</span>
       </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{createdAt}</p>
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-600">
+        {new Date(createdAt).toLocaleDateString()}
       </td>
 
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm space-x-2">
+        {/* Add Tracking Button */}
         <button
-          // onClick={() => setIsOpen(true)}
-          className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-lime-900 leading-tight"
+          onClick={() => setIsTrackModalOpen(true)}
+          className="btn btn-xs btn-primary text-white"
         >
-          <span className="absolute cursor-pointer inset-0 bg-red-200 opacity-50 rounded-full"></span>
-          <span className="relative cursor-pointer">Cancel</span>
+          + Add Tracking
         </button>
 
-        {/* <DeleteModal isOpen={isOpen} closeModal={closeModal} /> */}
+        {/* View Timeline Button */}
+        <button
+          onClick={() => setIsViewModalOpen(true)}
+          className="btn btn-xs btn-outline btn-secondary"
+        >
+          View Tracking
+        </button>
+
+        {/* Modals */}
+        <TrackingModal
+          isOpen={isTrackModalOpen}
+          closeModal={() => setIsTrackModalOpen(false)}
+          orderId={_id}
+          refetch={refetch}
+        />
+
+        <ViewTrackingModal
+          isOpen={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          history={trackingHistory || []}
+          productName={productName}
+        />
       </td>
     </tr>
   );

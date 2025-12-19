@@ -5,7 +5,11 @@ import ApprovedOrdersTableRow from "./ApprovedOrdersTableRow";
 
 const ApproveOrders = () => {
   const axiosSecure = useAxiosSecure();
-  const { data: orderProducts = [], isLoading } = useQuery({
+  const {
+    data: orderProducts = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["booking-orders"],
     queryFn: async () => {
       const res = await axiosSecure.get("/order-booking");
@@ -70,8 +74,12 @@ const ApproveOrders = () => {
                 </thead>
                 <tbody>
                   {orderProducts.map((order) =>
-                    order.status === "approved" ? (
-                      <ApprovedOrdersTableRow key={order._id} order={order} />
+                    order.status === "Approved" ? (
+                      <ApprovedOrdersTableRow
+                        key={order._id}
+                        order={order}
+                        refetch={refetch}
+                      />
                     ) : (
                       ""
                     )
