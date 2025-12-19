@@ -1,14 +1,32 @@
 import React from "react";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
-const ManageUserTableRow = ({ user }) => {
+const ManageUserTableRow = ({ user, refetch }) => {
   const axiosSecure = useAxiosSecure();
   const { displayName, email, userRole, status } = user || {};
-  const handleApprovedManager = (id) => {
-    const updatedInfo = { status: "approved" };
+
+  const updatedManagerStatus = (id, status) => {
+    const updatedInfo = { status: status };
     axiosSecure.patch(`/user/${id}`, updatedInfo).then((res) => {
       if (res.data.modifiedCount) {
-        alert("approved ");
+        toast.success(`${status} Successful`);
+        refetch();
+      }
+    });
+  };
+  const handleApprovedManager = (id) => {
+    updatedManagerStatus(id, "approved");
+  };
+  const handleRejectionManager = (id) => {
+    updatedManagerStatus(id, "rejected");
+  };
+
+  const deleteUser = (id) => {
+    axiosSecure.delete(`/user/${id}`).then((res) => {
+      if (res.data.deletedCount) {
+        toast.success("Delete user Successful");
+        refetch();
       }
     });
   };
@@ -39,7 +57,13 @@ const ManageUserTableRow = ({ user }) => {
       </td>
       {user.userRole === "Manager" && (
         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-          <p className="text-gray-900">{status}</p>
+          <p
+            className={`${
+              status === "approved" ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {status}
+          </p>
         </td>
       )}
 
@@ -58,8 +82,18 @@ const ManageUserTableRow = ({ user }) => {
               Approved
             </span>
           )}
-          <span className="mx-2 btn relative cursor-pointer">Reject</span>
-          <span className="relative btn cursor-pointer">delete</span>
+          <span
+            onClick={() => handleRejectionManager(user._id)}
+            className="mx-2 btn relative cursor-pointer"
+          >
+            Reject
+          </span>
+          <span
+            onClick={() => deleteUser(user._id)}
+            className="relative btn cursor-pointer"
+          >
+            delete
+          </span>
         </button>
 
         {/* <DeleteModal isOpen={isOpen} closeModal={closeModal} /> */}

@@ -22,6 +22,7 @@ import About from "../Pages/About/About";
 import Contact from "../Pages/Contact/Contact";
 import UpdateProduct from "../Pages/UpdateProduct/UpdateProduct";
 import ManagerUsers from "../components/DashBoard/Admin/ManageUsers/ManagerUsers";
+import OrderDetails from "../Pages/OrderDetails/OrderDetails";
 
 export const router = createBrowserRouter([
   {
@@ -163,6 +164,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRouter>
             <UpdateProduct></UpdateProduct>
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "order-details/:id",
+        element: (
+          <PrivateRouter>
+            <OrderDetails></OrderDetails>
           </PrivateRouter>
         ),
       },

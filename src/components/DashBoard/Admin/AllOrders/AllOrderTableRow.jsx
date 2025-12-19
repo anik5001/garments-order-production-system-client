@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 const AllOrderTableRow = ({ order }) => {
   const { _id, customerName, productName, orderPrice, orderQty, status } =
@@ -41,11 +42,13 @@ const AllOrderTableRow = ({ order }) => {
           // onClick={() => setIsOpen(true)}
           className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-lime-900 leading-tight"
         >
-          <span className="absolute cursor-pointer inset-0 bg-red-200 opacity-50 rounded-full"></span>
-          <span className="relative cursor-pointer">Cancel</span>
+          <Link
+            to={`/dashboard/order-details/${order._id}`}
+            className=" btn relative cursor-pointer"
+          >
+            View Details
+          </Link>
         </button>
-
-        {/* <DeleteModal isOpen={isOpen} closeModal={closeModal} /> */}
       </td>
     </tr>
   );

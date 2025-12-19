@@ -36,6 +36,7 @@ const UpdateProduct = () => {
     data: product = [],
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["updateProduct", id], // Unique key per product
     queryFn: async () => {
@@ -50,7 +51,8 @@ const UpdateProduct = () => {
     enabled: !!id, // Only run query if id exists
     // Retry once if fails
   });
-  console.log(product);
+  refetch();
+  // console.log(product);
   const {
     productName,
     images,
@@ -59,19 +61,20 @@ const UpdateProduct = () => {
     minOrder,
     price,
     quantity,
+    paymentOptions,
   } = product;
   // console.log(product);
   // ------------------ PRODUCT CREATE MUTATION ------------------
   const mutation = useMutation({
     mutationFn: async (product) => {
-      const res = await axiosSecure.post("/products", product);
+      const res = await axiosSecure.patch(`/products/${id}`, product);
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Product created successfully!");
+      toast.success("Product updated successfully!");
       reset();
     },
-    onError: () => toast.error("Failed to create product!"),
+    onError: () => toast.error("Failed to update product!"),
   });
 
   // ------------------ HANDLE IMAGE UPLOAD ------------------
@@ -124,7 +127,7 @@ const UpdateProduct = () => {
 
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: user?.email,
+        updatedBy: user?.email,
       };
 
       // 3. Save to database
@@ -137,7 +140,7 @@ const UpdateProduct = () => {
 
   return (
     <section className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow">
-      <h2 className="text-2xl font-bold mb-6 text-center">Add New Product</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Update Product</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Product Name */}
@@ -219,7 +222,7 @@ const UpdateProduct = () => {
         <div>
           <label className="font-semibold">Product Images</label>
           <input
-            defaultValue={images}
+            // defaultValue={images}
             type="file"
             multiple
             accept="image/*"
@@ -252,6 +255,7 @@ const UpdateProduct = () => {
             multiple
             className="select select-bordered w-full mt-2 h-24"
             {...register("paymentOptions")}
+            defaultValue={paymentOptions}
           >
             {paymentOptionsList.map((p, i) => (
               <option key={i} value={p}>
@@ -272,8 +276,8 @@ const UpdateProduct = () => {
           {uploading
             ? "Uploading Images..."
             : mutation.isPending
-            ? "Adding Product..."
-            : "Add Product"}
+            ? "Updating Product..."
+            : "Update Product"}
         </button>
       </form>
     </section>

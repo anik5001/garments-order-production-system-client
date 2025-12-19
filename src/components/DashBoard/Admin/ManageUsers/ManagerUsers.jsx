@@ -5,7 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 
 const ManagerUsers = () => {
   const axiosSecure = useAxiosSecure();
-  const { data: users = [], isLoading } = useQuery({
+  const {
+    data: users = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["Manger-users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/user");
@@ -66,7 +70,11 @@ const ManagerUsers = () => {
                   {users.map(
                     (user) =>
                       user.userRole === "Manager" && (
-                        <ManageUserTableRow key={user._id} user={user} />
+                        <ManageUserTableRow
+                          key={user._id}
+                          user={user}
+                          refetch={refetch}
+                        />
                       )
                   )}
                 </tbody>

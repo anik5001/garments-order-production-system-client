@@ -1,7 +1,16 @@
 import React from "react";
+import { Link, useNavigate } from "react-router";
 
 const AllProductTableRow = ({ product }) => {
+  const navigate = useNavigate();
   const { images, productName, price, createdBy, category } = product;
+  const handleUpdateProduct = (id) => {
+    console.log(id);
+    // navigate(`/dashboard/update-product/${id}`);
+  };
+  const handleDeleteProduct = (id) => {
+    console.log(id);
+  };
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -33,7 +42,22 @@ const AllProductTableRow = ({ product }) => {
         <p className="text-gray-900">{createdBy}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">update delete</p>
+        <Link
+          to={`/dashboard/update-product/${product._id}`}
+          // onClick={() => handleUpdateProduct(product._id)}
+          className="text-gray-900 btn "
+        >
+          Update{" "}
+        </Link>
+        <p
+          onClick={() => {
+            handleDeleteProduct(product._id);
+          }}
+          className="text-gray-900 btn"
+        >
+          {" "}
+          Delete
+        </p>
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
