@@ -21,6 +21,7 @@ import Profile from "../components/DashBoard/Profile/Profile";
 import About from "../Pages/About/About";
 import Contact from "../Pages/Contact/Contact";
 import UpdateProduct from "../Pages/UpdateProduct/UpdateProduct";
+import ManagerUsers from "../components/DashBoard/Admin/ManageUsers/ManagerUsers";
 
 export const router = createBrowserRouter([
   {
@@ -114,10 +115,18 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "manage-users",
+        path: "buyer-users",
         element: (
           <PrivateRouter>
             <ManageUsers></ManageUsers>,
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "manager-users",
+        element: (
+          <PrivateRouter>
+            <ManagerUsers></ManagerUsers>
           </PrivateRouter>
         ),
       },

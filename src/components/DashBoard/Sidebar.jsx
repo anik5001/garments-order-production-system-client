@@ -84,7 +84,12 @@ const Sidebar = () => {
               {userRole.role === "Admin" && (
                 <ul className="flex flex-col gap-3">
                   <li>
-                    <NavLink to="/dashboard/manage-users">Manage Users</NavLink>
+                    <NavLink to="/dashboard/manager-users">
+                      Manager Users
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/buyer-users">Buyer Users</NavLink>
                   </li>
                   <li className="">
                     <NavLink to="/dashboard/all-products">All Products</NavLink>

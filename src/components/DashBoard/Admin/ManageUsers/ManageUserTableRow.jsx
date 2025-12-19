@@ -1,7 +1,17 @@
 import React from "react";
+import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 
 const ManageUserTableRow = ({ user }) => {
+  const axiosSecure = useAxiosSecure();
   const { displayName, email, userRole, status } = user || {};
+  const handleApprovedManager = (id) => {
+    const updatedInfo = { status: "approved" };
+    axiosSecure.patch(`/user/${id}`, updatedInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        alert("approved ");
+      }
+    });
+  };
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -27,18 +37,29 @@ const ManageUserTableRow = ({ user }) => {
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900">{userRole}</p>
       </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{status}</p>
-      </td>
+      {user.userRole === "Manager" && (
+        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+          <p className="text-gray-900">{status}</p>
+        </td>
+      )}
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <button
           // onClick={() => setIsOpen(true)}
-          className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-lime-900 leading-tight"
+          className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-lime-900 leading-tight "
         >
-          <span className="absolute cursor-pointer inset-0 bg-red-200 opacity-50 rounded-full"></span>
-          <span className="relative cursor-pointer">Approved</span>
-          <span className="relative cursor-pointer">Cancel</span>
+          {user.userRole === "Manager" && (
+            <span
+              onClick={() => {
+                handleApprovedManager(user._id);
+              }}
+              className="relative cursor-pointer btn"
+            >
+              Approved
+            </span>
+          )}
+          <span className="mx-2 btn relative cursor-pointer">Reject</span>
+          <span className="relative btn cursor-pointer">delete</span>
         </button>
 
         {/* <DeleteModal isOpen={isOpen} closeModal={closeModal} /> */}

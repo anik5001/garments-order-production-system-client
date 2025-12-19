@@ -1,12 +1,12 @@
 import React from "react";
+import ManageUserTableRow from "./ManageUserTableRow";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import ManageUserTableRow from "./ManageUserTableRow";
 
-const ManageUsers = () => {
+const ManagerUsers = () => {
   const axiosSecure = useAxiosSecure();
   const { data: users = [], isLoading } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["Manger-users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/user");
       return res.data;
@@ -47,12 +47,12 @@ const ManageUsers = () => {
                     >
                       Role
                     </th>
-                    {/* <th
+                    <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
                       Status
-                    </th> */}
+                    </th>
 
                     <th
                       scope="col"
@@ -65,7 +65,7 @@ const ManageUsers = () => {
                 <tbody>
                   {users.map(
                     (user) =>
-                      user.userRole === "Buyer" && (
+                      user.userRole === "Manager" && (
                         <ManageUserTableRow key={user._id} user={user} />
                       )
                   )}
@@ -79,4 +79,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default ManagerUsers;
