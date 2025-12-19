@@ -7,7 +7,10 @@ const PaymentSuccess = () => {
   const sessionId = searchParams.get("session_id");
   console.log(sessionId);
   useEffect(() => {
-    axios.post(`http://localhost:3000/payment-success`, { sessionId });
+    axios.post(
+      `https://garments-order-production-system-se.vercel.app/payment-success`,
+      { sessionId }
+    );
   }, [sessionId]);
   return (
     <div className="flex flex-col items-center justify-center">

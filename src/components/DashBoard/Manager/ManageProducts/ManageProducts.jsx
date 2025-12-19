@@ -1,79 +1,93 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
-import useAuth from "../../../../Hooks/useAuth";
-import Loading from "../../../LoadingSpinner/Loading";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import ManageProductTableRow from "./ManageProductTableRow";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 
 const ManageProducts = () => {
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: manageProducts = [], isLoading } = useQuery({
-    queryKey: ["Manage-products", user?.email],
+  const queryClient = useQueryClient();
+  const [search, setSearch] = useState("");
+
+  // Fetch products
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ["products"],
     queryFn: async () => {
-      const result = await axiosSecure(`/my-products/${user?.email}`);
-      return result.data;
+      const res = await axiosSecure.get("/products");
+      return res.data;
     },
   });
-  console.log(manageProducts);
 
-  if (isLoading) return <Loading></Loading>;
+  // Delete mutation (v5)
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => {
+      const res = await axiosSecure.delete(`/products/${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      Swal.fire("Deleted!", "Product deleted successfully", "success");
+    },
+  });
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This product will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteMutation.mutate(id);
+      }
+    });
+  };
+
+  const filteredProducts = products.filter(
+    (p) =>
+      p.productName.toLowerCase().includes(search.toLowerCase()) ||
+      p.category?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (isLoading) return <p>Loading...</p>;
+
   return (
-    <>
-      <div className="container mx-auto px-4 sm:px-8">
-        <div className="py-8">
-          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-              <table className="min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
-                    >
-                      image
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
-                    >
-                      Price
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
-                    >
-                      Payment Mode
-                    </th>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Manage Products</h2>
 
-                    <th
-                      scope="col"
-                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
-                    >
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {manageProducts.map((product) => (
-                    <ManageProductTableRow
-                      key={product._id}
-                      product={product}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      <input
+        type="text"
+        placeholder="Search by name or category"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border px-3 py-2 mb-4 w-full md:w-1/3 rounded"
+      />
+
+      <div className="overflow-x-auto">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Payment Mode</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredProducts.map((product) => (
+              <ManageProductTableRow
+                key={product._id}
+                product={product}
+                onDelete={handleDelete}
+              />
+            ))}
+          </tbody>
+        </table>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -77,7 +77,7 @@ const BookingForm = () => {
     // Payment Logic
     if (bookingInfo.paymentMethod === "payfast") {
       const { data } = await axios.post(
-        "http://localhost:3000/create-checkout-session",
+        "https://garments-order-production-system-se.vercel.app/create-checkout-session",
         bookingInfo
       );
       window.location.href = data.url;
@@ -87,11 +87,14 @@ const BookingForm = () => {
     }
 
     // Cash on Delivery → save directly
-    fetch("http://localhost:3000/order-booking", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(bookingInfo),
-    })
+    fetch(
+      "https://garments-order-production-system-se.vercel.app/order-booking",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(bookingInfo),
+      }
+    )
       .then((res) => res.json())
       .then(() => {
         alert("Booking placed successfully!");
@@ -244,7 +247,9 @@ const BookingForm = () => {
         </div>
 
         {/* Submit */}
-        <button className="btn btn-primary w-full text-lg">Place Order</button>
+        <button className="btn btn-primary w-full text-lg">
+          Confirm Order
+        </button>
       </form>
     </div>
   );

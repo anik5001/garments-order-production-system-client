@@ -10,7 +10,6 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
-  const [showBooking, setShowBooking] = useState(false);
 
   // Use the query hook properly
   const {
@@ -128,7 +127,7 @@ const ProductDetails = () => {
 
           {/* Product Info */}
           <div>
-            <h1 className="text-3xl font-bold mb-4">{productName}</h1>
+            <h1 className=" text-3xl font-bold mb-4">{productName}</h1>
 
             <div className="mb-6">
               <span className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">
@@ -184,11 +183,10 @@ const ProductDetails = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-full">
               <Link
                 to={`/booking-product/${id}`}
-                onClick={() => setShowBooking(!showBooking)}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                className="w-full btn bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
               >
                 Place Order
               </Link>

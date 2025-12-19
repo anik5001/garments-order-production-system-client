@@ -12,21 +12,32 @@ import { BsGraphUp } from "react-icons/bs";
 
 import useAuth from "../../Hooks/useAuth";
 import useRole from "../../Hooks/useRole";
+import Loading from "../LoadingSpinner/Loading";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
-  const [role, isRoleLoading] = useRole();
-  const { logOut } = useAuth();
+  const [userRole, isRoleLoading] = useRole();
+  const { signOutUser } = useAuth();
   const [isActive, setActive] = useState(false);
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        toast.success("Sign Out Successful");
+      })
+      .catch((er) => {
+        console.log(er);
+      });
+  };
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
   };
-
+  if (isRoleLoading) return <Loading></Loading>;
   return (
     <>
       {/* Small Screen Navbar, only visible till md breakpoint */}
-      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
+      <div className=" bg-gray-100 text-gray-800 flex justify-between md:hidden">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
             {/* <Link to="/">
@@ -64,14 +75,17 @@ const Sidebar = () => {
           <div className="flex flex-col justify-between flex-1 mt-6 text-center">
             {/*  Menu Items */}
             <nav>
-              {role === "Buyer" && (
+              {userRole.role === "Buyer" && (
                 <div className="text-center">
                   <NavLink to="/dashboard/my-orders">My Order</NavLink>
                   <br />
                 </div>
               )}
-              {role === "Admin" && (
+              {userRole.role === "Admin" && (
                 <ul className="flex flex-col gap-3">
+                  <li>
+                    <NavLink to="/dashboard/manage-users">Manage Users</NavLink>
+                  </li>
                   <li className="">
                     <NavLink to="/dashboard/all-products">All Products</NavLink>
                   </li>
@@ -79,37 +93,34 @@ const Sidebar = () => {
                   <li>
                     <NavLink to="/dashboard/all-orders">All Orders</NavLink>
                   </li>
-
-                  <li>
-                    <NavLink to="/dashboard/all-orders">All Orders</NavLink>
-                  </li>
                 </ul>
               )}
-              {role === "Manager" && (
-                <ul className="flex flex-col gap-3">
-                  <li>
-                    <NavLink to="/dashboard/add-product">Add Product</NavLink>
-                  </li>
+              {userRole.role === "Manager" &&
+                userRole.status === "approved" && (
+                  <ul className="flex flex-col gap-3">
+                    <li>
+                      <NavLink to="/dashboard/add-product">Add Product</NavLink>
+                    </li>
 
-                  <li>
-                    <NavLink to="/dashboard/manage-products">
-                      Manage Products
-                    </NavLink>
-                  </li>
+                    <li>
+                      <NavLink to="/dashboard/manage-products">
+                        Manage Products
+                      </NavLink>
+                    </li>
 
-                  <li>
-                    <NavLink to="/dashboard/pending-orders">
-                      Pending Orders
-                    </NavLink>
-                  </li>
+                    <li>
+                      <NavLink to="/dashboard/pending-orders">
+                        Pending Orders
+                      </NavLink>
+                    </li>
 
-                  <li>
-                    <NavLink to="/dashboard/approved-orders">
-                      Approved Orders
-                    </NavLink>{" "}
-                  </li>
-                </ul>
-              )}
+                    <li>
+                      <NavLink to="/dashboard/approved-orders">
+                        Approved Orders
+                      </NavLink>{" "}
+                    </li>
+                  </ul>
+                )}
               {/* Common Menu */}
               {/* <MenuItem
                 icon={BsGraphUp}
@@ -135,12 +146,10 @@ const Sidebar = () => {
               address="/dashboard/profile"
             /> */}
             <button
-              onClick={logOut}
+              onClick={handleSignOut}
               className="flex cursor-pointer w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
             >
-              <GrLogout className="w-5 h-5" />
-
-              <span className="mx-4 font-medium">Logout</span>
+              <span className="text-center mx-4 font-medium">Logout</span>
             </button>
           </div>
         </div>

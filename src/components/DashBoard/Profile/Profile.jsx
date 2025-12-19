@@ -23,9 +23,14 @@ const Profile = () => {
             />
           </a>
 
-          <p className="p-2 px-4 text-xs text-white bg-lime-500 rounded-full">
-            {role}
-          </p>
+          <div className="flex gap-2">
+            <p className="p-2 px-4 text-xs text-white bg-lime-500 rounded-full">
+              {role.role}
+            </p>
+            <p className="p-2 px-4 text-xs text-white bg-blue-800 rounded-full">
+              {role.status}
+            </p>
+          </div>
           <p className="mt-2 text-xl font-medium text-gray-800 ">
             User Id: {user?.uid}
           </p>

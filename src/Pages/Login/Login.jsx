@@ -1,26 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [loginLoading, setLoginLoading] = useState(false);
   const { signinUser, googleSignUser } = useAuth();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+
+    formState: { errors, isLoading },
   } = useForm();
   const axiosSecure = useAxiosSecure();
   const handleLogin = (data) => {
-    console.log("hiii");
-    console.log(data);
+    // console.log("hiii");
+    // console.log(data);
+    setLoginLoading(true);
     signinUser(data.email, data.password)
       .then((result) => {
-        console.log(result);
-        navigate(location?.state, "/");
+        // console.log(result);
+        toast.success("Login Successful");
+        navigate(location?.state || "/");
+        setLoginLoading(false);
       })
       .catch((e) => {
         console.log(e.message);
@@ -29,20 +35,20 @@ const Login = () => {
   const handleGoogleSign = () => {
     googleSignUser()
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
         const userInfo = {
           email: result.user.email,
           displayName: result.user.displayName,
           photoURL: result.user.photoURL,
-          userRole: "user",
+          userRole: "Buyer",
         };
-        console.log(userInfo);
+        // console.log(userInfo);
         axiosSecure.post("/user", userInfo).then((res) => {
           if (res.data.insertedId) {
-            console.log("user added data DB");
+            toast.success("Google Login Successful");
+            navigate(location?.state || "/");
           }
         });
-        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -75,7 +81,9 @@ const Login = () => {
               <div>
                 <a className="link link-hover">Forgot password?</a>
               </div>
-              <button className="btn btn-neutral mt-4">Login</button>
+              <button className="btn btn-neutral mt-4">
+                {loginLoading ? "login..." : "Login"}
+              </button>
             </fieldset>
           </form>
           <div>

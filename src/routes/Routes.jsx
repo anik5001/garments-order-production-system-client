@@ -18,6 +18,9 @@ import ManageProducts from "../components/DashBoard/Manager/ManageProducts/Manag
 import PendingOrders from "../components/DashBoard/Manager/PendingOrders/PendingOrders";
 import ApproveOrders from "../components/DashBoard/Manager/ApproveOrders/ApproveOrders";
 import Profile from "../components/DashBoard/Profile/Profile";
+import About from "../Pages/About/About";
+import Contact from "../Pages/Contact/Contact";
+import UpdateProduct from "../Pages/UpdateProduct/UpdateProduct";
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +55,14 @@ export const router = createBrowserRouter([
         path: "/payment-success",
         Component: PaymentSuccess,
       },
+      {
+        path: "/about",
+        element: <About></About>,
+      },
+      {
+        path: "/contact",
+        element: <Contact></Contact>,
+      },
     ],
   },
   {
@@ -64,43 +75,87 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout></DashboardLayout>,
+    element: (
+      <PrivateRouter>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRouter>
+    ),
     children: [
       {
         path: "/dashboard/add-product",
-        element: <AddProduct></AddProduct>,
+        element: (
+          <PrivateRouter>
+            <AddProduct></AddProduct>
+          </PrivateRouter>
+        ),
       },
       {
         path: "my-orders",
-        element: <MyOrders></MyOrders>,
+        element: (
+          <PrivateRouter>
+            <MyOrders></MyOrders>
+          </PrivateRouter>
+        ),
       },
       {
         path: "all-products",
-        element: <AllProduct></AllProduct>,
+        element: (
+          <PrivateRouter>
+            <AllProduct></AllProduct>
+          </PrivateRouter>
+        ),
       },
       {
         path: "all-orders",
-        element: <AllOrders></AllOrders>,
+        element: (
+          <PrivateRouter>
+            <AllOrders></AllOrders>,
+          </PrivateRouter>
+        ),
       },
       {
         path: "manage-users",
-        element: <ManageUsers></ManageUsers>,
+        element: (
+          <PrivateRouter>
+            <ManageUsers></ManageUsers>,
+          </PrivateRouter>
+        ),
       },
       {
         path: "manage-products",
-        element: <ManageProducts></ManageProducts>,
+        element: (
+          <PrivateRouter>
+            <ManageProducts></ManageProducts>,
+          </PrivateRouter>
+        ),
       },
       {
         path: "pending-orders",
-        element: <PendingOrders></PendingOrders>,
+        element: (
+          <PrivateRouter>
+            <PendingOrders></PendingOrders>,
+          </PrivateRouter>
+        ),
       },
       {
         path: "approved-orders",
-        element: <ApproveOrders></ApproveOrders>,
+        element: (
+          <PrivateRouter>
+            <ApproveOrders></ApproveOrders>
+          </PrivateRouter>
+        ),
       },
       {
         path: "profile",
         element: <Profile></Profile>,
+      },
+      {
+        path: "update-product/:id",
+        element: (
+          <PrivateRouter>
+            <UpdateProduct></UpdateProduct>
+          </PrivateRouter>
+        ),
       },
     ],
   },

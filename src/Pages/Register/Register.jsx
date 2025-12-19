@@ -1,30 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const { createUser, updateProfileUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [registerLoading, setRegisterLoading] = useState(false);
   const axiosSecure = useAxiosSecure();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isLoading },
   } = useForm();
 
   const registerHandler = (data) => {
     // console.log(data);
     // console.log(data.email);
+    setRegisterLoading(true);
     const profileImg = data.photo[0];
     createUser(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
         // profile update
 
         const formData = new FormData();
@@ -48,7 +51,7 @@ const Register = () => {
 
             axiosSecure.post("/user", userInfo).then((res) => {
               if (res.data.insertedId) {
-                console.log("user added data DB");
+                // console.log("user added data DB");
               }
             });
 
@@ -59,8 +62,9 @@ const Register = () => {
 
             updateProfileUser(userProfile)
               .then(() => {
-                console.log("success full update profile");
-                navigate("/");
+                toast.success("Register Successful ");
+                navigate(location?.state || "/");
+                setRegisterLoading(false);
               })
               .catch((err) => {
                 console.log(err);
@@ -71,7 +75,8 @@ const Register = () => {
           });
       })
       .catch((e) => {
-        console.log(e.message);
+        toast.error(e.message);
+        setRegisterLoading(false);
       });
   };
   return (
@@ -124,7 +129,7 @@ const Register = () => {
                 className="select"
                 {...register("role")}
               >
-                <option disabled={true}>Pick a color</option>
+                <option disabled={true}>Pick a role</option>
                 <option value="Manager">Manager</option>
                 <option value="Buyer">Buyer</option>
                 {/* <option value="">Velvet</option> */}
@@ -160,7 +165,7 @@ const Register = () => {
                 <a className="link link-hover">Forgot password?</a>
               </div>
               <button className="btn btn-primary text-white mt-4">
-                Register
+                {registerLoading ? "Register..." : "   Register"}
               </button>
             </fieldset>
           </form>
