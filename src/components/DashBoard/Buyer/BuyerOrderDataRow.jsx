@@ -1,78 +1,113 @@
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import ViewOrderModal from "./ViewOrderModal";
 
-const BuyerOrderDataRow = ({ order }) => {
+const BuyerOrderDataRow = ({ order, refetch }) => {
   const axiosSecure = useAxiosSecure();
-  const { _id, productId, paymentMethod, orderPrice, orderQty, status } =
-    order || {};
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   const {
-    data: product = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["product", productId], // Unique key per product
+    _id,
+    productId,
+    paymentMethod,
+    orderPrice,
+    orderQty,
+    status,
+    trackingHistory,
+  } = order || {};
+
+  // Fetch product details for image/name
+  const { data: product = {}, isLoading } = useQuery({
+    queryKey: ["product", productId],
     queryFn: async () => {
-      try {
-        const res = await axiosSecure.get(`/products/${productId}`);
-        // console.log(res);
-        return res.data;
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        throw error;
-      }
+      const res = await axiosSecure.get(`/products/${productId}`);
+      return res.data;
     },
-    enabled: !!productId, // Only run query if id exists
-    retry: 1, // Retry once if fails
+    enabled: !!productId,
   });
-  console.log(product);
+
+  const handleCancel = async () => {
+    if (window.confirm("Are you sure you want to cancel this order?")) {
+      try {
+        await axiosSecure.patch(`/order/cancel/${_id}`);
+        refetch(); // Refresh the table
+      } catch (err) {
+        console.error("Cancel failed", err);
+      }
+    }
+  };
+
   return (
-    <tr>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex items-center">
-          <div className="shrink-0">
-            <div className="block relative">
-              {_id}
-              {/* <img
-                alt="profile"
-                src={image}
-                className="mx-auto object-cover rounded h-10 w-15 "
-              /> */}
-            </div>
-          </div>
-        </div>
+    <tr className="hover:bg-gray-50 transition-colors">
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-xs font-mono">
+        {_id}
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div>
-          <img className="w-10 h-10" src={product.images} alt="" />
-          <p className="text-gray-900">{product.productName}</p>
+        <div className="flex items-center gap-3">
+          <img
+            className="w-10 h-10 rounded shadow-sm object-cover"
+            src={product?.images?.[0] || product?.images}
+            alt={product?.productName}
+          />
+          <p className="text-gray-900 font-medium">
+            {product?.productName || "Loading..."}
+          </p>
         </div>
       </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{orderQty}</p>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{status}</p>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{paymentMethod}</p>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900">{orderPrice}</p>
+
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+        {orderQty}
       </td>
 
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <button
-          // onClick={() => setIsOpen(true)}
-          className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-lime-900 leading-tight"
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+        <span
+          className={`badge badge-sm font-semibold uppercase ${
+            status === "pending"
+              ? "badge-warning"
+              : status === "approved"
+              ? "badge-success text-white"
+              : "badge-ghost"
+          }`}
         >
-          <span className="absolute cursor-pointer inset-0 bg-red-200 opacity-50 rounded-full"></span>
-          <span className="relative cursor-pointer">Cancel</span>
-        </button>
+          {status}
+        </span>
+      </td>
 
-        {/* <DeleteModal isOpen={isOpen} closeModal={closeModal} /> */}
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+        <p className="text-gray-900 uppercase">{paymentMethod}</p>
+        <p className="font-bold">৳{orderPrice}</p>
+      </td>
+
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <div className="flex items-center gap-2">
+          {/* View Button */}
+          <button
+            onClick={() => setIsViewOpen(true)}
+            className="btn btn-xs btn-outline btn-primary"
+          >
+            View
+          </button>
+
+          {/* Cancel Button - Only visible if Pending */}
+          {status?.toLowerCase() === "pending" && (
+            <button
+              onClick={handleCancel}
+              className="btn btn-xs btn-error btn-outline"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+
+        {/* Modal for details and tracking */}
+        <ViewOrderModal
+          isOpen={isViewOpen}
+          closeModal={() => setIsViewOpen(false)}
+          order={order}
+          product={product}
+        />
       </td>
     </tr>
   );
