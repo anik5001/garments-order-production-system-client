@@ -1,86 +1,178 @@
-# 🧵 Garments Order and Production System Tracker
+# 🧵 Garments Order & Production Tracker System
 
-A professional full-stack Garments Management System designed to bridge the gap between Buyers, Managers, and Admins. This platform allows buyers to place orders and track the real-time production status (Cutting, Sewing, QC, etc.), while managers handle the manufacturing workflow.
+A **full-stack Garments Order & Production Management System** designed to streamline communication between **Buyers, Managers, and Admins**.  
+The platform allows buyers to place orders and track real-time production progress, managers to handle products and production stages, and admins to control users and system analytics.
 
 ---
 
 ## 🚀 Live Links
 
-- **Client Live Site:** [https://garments-order-productio-c3197.web.app](https://garments-order-productio-c3197.web.app)
-- **Server API:** [https://garments-order-production-system-se.vercel.app](https://garments-order-production-system-se.vercel.app)
-- **Server Repository:** [GitHub Repo](https://github.com/anik5001/garments-order-production-system-server)
+- **Client Live Site:**  
+  https://garments-order-productio-c3197.web.app
+
+- **Server API:**  
+  https://garments-order-production-system-se.vercel.app
+
+- **Server Repository:**  
+  https://github.com/anik5001/garments-order-production-system-server
 
 ---
 
-## 🛠 Tech Stack
+## 🎯 Project Purpose
 
-**Frontend:** React 19, Tailwind CSS 4, DaisyUI, Framer Motion (Animations)  
-**State Management:** TanStack Query (React Query) v5  
-**Authentication:** Firebase Authentication & Firebase Admin SDK  
-**Backend:** Node.js, Express.js, MongoDB  
-**Form Handling:** React Hook Form  
-**UI Notifications:** React Hot Toast, SweetAlert2  
+Small and medium garment factories often struggle with:
+- Order tracking
+- Production visibility
+- Role-based responsibility management
+
+This system solves those issues by providing:
+- Structured production stages
+- Secure online payments
+- Role-based dashboards
+- Real-time order tracking
+
+---
+
+## 🧑‍💼 User Roles & Permissions
+
+### 👤 Buyer
+- Browse products
+- View product details
+- Place booking/orders
+- Pay via **Stripe** or choose **Cash on Delivery**
+- Track order production timeline
+- Cancel pending orders
+
+### 🧑‍🏭 Manager
+- Add & manage products
+- Approve or reject orders
+- Update production tracking stages
+- View assigned orders
+- Profile management
+
+### 🧑‍💻 Admin
+- Manage users (approve, suspend, role update)
+- View all products
+- Control home page featured products
+- Monitor all orders
+- View system analytics (optional)
 
 ---
 
 ## ✨ Key Features
 
-### 👤 User Roles & Access Control
-- **Buyer:** Can browse products, book orders, pay via PayFast, and track their order's production timeline.
-- **Manager:** Can add/manage products and update the production status of approved orders (e.g., Cutting Completed, Sewing Started).
-- **Admin:** Manages user roles, approves manager accounts, and monitors all system activity.
+### 🏠 Home Page
+- Animated Hero Banner
+- Featured Products (from MongoDB)
+- How It Works (step-by-step)
+- Customer Feedback Carousel
+- Extra professional sections (Why Choose Us, System Workflow)
 
-### 🏭 Production Tracking System
-- **Real-time Timeline:** A visual step-by-step progress tracker for every order.
-- **Update Logs:** Managers can add notes, locations, and timestamps for every production milestone.
-- **Dynamic Status:** Auto-updates from "Pending" to "Approved" and through various manufacturing stages.
+### 🛒 Product System
+- All Products page with search & filter
+- Product Details (Private Route)
+- Minimum order quantity validation
+- Multiple payment options (COD / Stripe)
 
-### 🔐 Security & UX
-- **Firebase Admin SDK:** Verified backend routes to ensure data integrity and role-based security.
-- **Responsive Dashboard:** A professional sidebar-based layout optimized for mobile and desktop.
-- **Interactive UI:** Smooth transitions using Framer Motion and modern components from DaisyUI.
+### 💳 Payment System
+- **Stripe Checkout Integration**
+- Secure payment session
+- Payment verification before order creation
+- Automatic redirect after payment success
+
+### 🏭 Production Tracking
+- Visual timeline:
+  - Cutting Completed
+  - Sewing Started
+  - Finishing
+  - QC Checked
+  - Packed
+  - Shipped
+- Read-only access for buyers
+- Manager-controlled updates
+
+### 📊 Dashboard
+- Role-based private routes
+- Responsive sidebar layout
+- Data tables with search & pagination
+- SweetAlert confirmation for CRUD actions
+
+---
+
+## 🔐 Security & Best Practices
+
+- Firebase Authentication
+- Firebase Admin SDK (server-side verification)
+- JWT stored in **HTTP-only cookies**
+- Protected private routes
+- Environment variables for:
+  - Firebase config
+  - MongoDB credentials
+  - Stripe secret key
+- Proper CORS handling
+- Reload-safe routing (no redirect on refresh)
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- React 19
+- Tailwind CSS 4
+- DaisyUI
+- Framer Motion
+- TanStack React Query v5
+- React Hook Form
+- Axios
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Stripe API
+- Firebase Admin SDK
+
+### Tools & Libraries
+- SweetAlert2
+- React Hot Toast
+- Swiper.js
+- Lucide Icons / React Icons
 
 ---
 
 ## 📦 Major Dependencies
 
 | Package | Purpose |
-| :--- | :--- |
-| `@tanstack/react-query` | Efficient data fetching and caching |
-| `firebase` | Authentication and hosting |
-| `framer-motion` | Smooth UI animations and transitions |
-| `axios` | Promise-based HTTP client for API calls |
-| `react-hook-form` | Performance-oriented form validation |
-| `lucide-react` & `react-icons` | Comprehensive icon library |
-| `swiper` | Interactive product carousels |
-| `sweetalert2` | Beautiful popup alerts |
+|------|--------|
+| @tanstack/react-query | Data fetching & caching |
+| firebase | Authentication & hosting |
+| stripe | Online payments |
+| react-hook-form | Form validation |
+| axios | API communication |
+| framer-motion | Animations |
+| sweetalert2 | Alerts & confirmations |
 
 ---
 
-## 🛠 Installation & Setup
+## ⚙️ Installation & Setup
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/your-username/garments-order-production-client.git](https://github.com/your-username/garments-order-production-client.git)
-
-   Install dependencies:
-
-Bash
-
+### 1️⃣ Clone Repositories
+```bash
+git clone https://github.com/anik5001/garments-order-production-client.git
+git clone https://github.com/anik5001/garments-order-production-system-server.git
+###2️⃣ Install Dependencies
 npm install
-Environment Configuration: Create a .env.local file in the root and add your Firebase and API configuration:
 
-Code snippet
+###3️⃣ Environment Variables
+Client (.env)
+VITE_API_URL=your_server_url
+VITE_FIREBASE_API_KEY=your_key
+VITE_IMAGE_HOST_KEY=your_imgbb_key
 
-VITE_apiKey=your_api_key
-VITE_authDomain=your_auth_domain
-VITE_projectId=your_project_id
-VITE_storageBucket=your_storage_bucket
-VITE_messagingSenderId=your_messaging_id
-VITE_appId=your_app_id
-VITE_API_URL=[https://garments-order-production-system-se.vercel.app](https://garments-order-production-system-se.vercel.app)
-Run the project:
+Server (.env)
+MONGODB_URI=your_mongodb_uri
+STRIPE_SECRET_KEY=your_stripe_secret
+CLIENT_DOMAIN=your_client_url
 
-Bash
-
-npm run dev```
+###4️⃣ Run Project
+npm run dev
