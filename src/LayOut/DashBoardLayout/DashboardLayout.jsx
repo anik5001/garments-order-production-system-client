@@ -6,9 +6,7 @@ import Footer from "../../components/Shared/Footer/Footer";
 const DashboardLayout = () => {
   return (
     <>
-      <div className="md:ml-64">
-        <Navbar></Navbar>
-      </div>
+      <div className="md:ml-64">{/* <Navbar></Navbar> */}</div>
       <div className="relative  md:flex bg-white">
         {/* Left Side: Sidebar Component */}
         <Sidebar />
@@ -20,9 +18,7 @@ const DashboardLayout = () => {
           </div>
         </div>
       </div>
-      <div className="md:ml-64">
-        <Footer></Footer>
-      </div>
+      <div className="md:ml-64">{/* <Footer></Footer> */}</div>
     </>
   );
 };

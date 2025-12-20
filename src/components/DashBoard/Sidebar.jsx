@@ -1,166 +1,216 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
-
-import logo from "../../assets/logo.jpg";
-// Icons
-import { GrLogout } from "react-icons/gr";
-import { FcSettings } from "react-icons/fc";
-import { AiOutlineBars } from "react-icons/ai";
-import { BsGraphUp } from "react-icons/bs";
-
-// User Menu
-
 import useAuth from "../../Hooks/useAuth";
 import useRole from "../../Hooks/useRole";
 import Loading from "../LoadingSpinner/Loading";
 import toast from "react-hot-toast";
 
+// Icons
+import { GrLogout } from "react-icons/gr";
+import {
+  AiOutlineBars,
+  AiOutlineProduct,
+  AiOutlineUsergroupAdd,
+} from "react-icons/ai";
+import { BsGraphUp, BsCartCheck, BsBagPlus, BsListTask } from "react-icons/bs";
+import {
+  MdOutlineManageAccounts,
+  MdOutlinePendingActions,
+} from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
+import { HiOutlineUsers } from "react-icons/hi";
+
 const Sidebar = () => {
   const [userRole, isRoleLoading] = useRole();
-  const { signOutUser } = useAuth();
+  const { signOutUser, user } = useAuth();
   const [isActive, setActive] = useState(false);
+
   const handleSignOut = () => {
     signOutUser()
-      .then(() => {
-        toast.success("Sign Out Successful");
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+      .then(() => toast.success("Sign Out Successful"))
+      .catch((er) => console.log(er));
   };
 
-  // Sidebar Responsive Handler
-  const handleToggle = () => {
-    setActive(!isActive);
-  };
-  if (isRoleLoading) return <Loading></Loading>;
+  const handleToggle = () => setActive(!isActive);
+
+  // NavLink Active Styling
+  const activeClass = "bg-primary text-white shadow-md";
+  const normalClass =
+    "flex items-center px-4 py-3 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 rounded-lg mx-2 my-1";
+
+  if (isRoleLoading) return <Loading />;
+
   return (
     <>
-      {/* Small Screen Navbar, only visible till md breakpoint */}
-      <div className=" bg-gray-100 text-gray-800 flex justify-between md:hidden">
-        <div>
-          <div className="block cursor-pointer p-4 font-bold">
-            {/* <Link to="/">
-              <img src={logo} alt="logo" width="100" height="100" />
-            </Link> */}
-          </div>
+      {/* Mobile Header */}
+      <div className="bg-white text-gray-800 flex justify-between md:hidden shadow-sm border-b">
+        <div className="p-4 font-bold text-xl text-primary uppercase tracking-wider">
+          Garments CRM
         </div>
-
-        <button
-          onClick={handleToggle}
-          className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200"
-        >
-          <AiOutlineBars className="h-5 w-5" />
+        <button onClick={handleToggle} className="p-4 focus:outline-none">
+          <AiOutlineBars className="h-6 w-6" />
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* Sidebar Container */}
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
-          isActive && "-translate-x-full"
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        className={`z-20 md:fixed flex flex-col justify-between overflow-x-hidden bg-white border-r w-64 space-y-6 absolute inset-y-0 left-0 transform 
+        ${isActive ? "translate-x-0" : "-translate-x-full"} 
+        md:translate-x-0 transition duration-300 ease-in-out`}
       >
         <div className="flex flex-col h-full">
-          {/* Top Content */}
-          <div>
-            {/* Logo */}
-            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-lime-100 mx-auto">
-              {/* <Link to="/">
-                <img src={logo} alt="logo" width="100" height="100" />
-              </Link> */}
-            </div>
+          {/* 1. Header / Logo */}
+          <div className="px-6 py-8">
+            <Link to="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl">
+                G
+              </div>
+              <span className="font-bold text-xl tracking-tight text-gray-800">
+                Garments<span className="text-primary">Hub</span>
+              </span>
+            </Link>
           </div>
 
-          {/* Middle Content */}
-          <div className="flex flex-col justify-between flex-1 mt-6 text-center">
-            {/*  Menu Items */}
-            <nav>
-              {userRole.role === "Buyer" && (
-                <div className="text-center">
-                  <li>
-                    <NavLink to="/dashboard/my-orders">My Order</NavLink>
-                  </li>
-                  {/* <li>
-                    <NavLink to="/dashboard/track-order">TrackOrder</NavLink>
-                  </li> */}
-                  <br />
-                </div>
-              )}
-              {userRole.role === "Admin" && (
-                <ul className="flex flex-col gap-3">
-                  <li>
-                    <NavLink to="/dashboard/manager-users">
-                      Manager Users
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/dashboard/buyer-users">Buyer Users</NavLink>
-                  </li>
-                  <li className="">
-                    <NavLink to="/dashboard/all-products">All Products</NavLink>
-                  </li>
+          {/* 2. Navigation Menu */}
+          <nav className="flex-1 px-2">
+            {/* BUYER MENU */}
+            {userRole.role === "Buyer" && (
+              <>
+                <p className="px-4 text-[10px] uppercase font-bold text-gray-400 mb-2">
+                  Shopping
+                </p>
+                <NavLink
+                  to="/dashboard/my-orders"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <BsCartCheck className="w-5 h-5 mr-3" /> My Orders
+                </NavLink>
+              </>
+            )}
 
-                  <li>
-                    <NavLink to="/dashboard/all-orders">All Orders</NavLink>
-                  </li>
-                </ul>
-              )}
-              {userRole.role === "Manager" &&
-                userRole.status === "approved" && (
-                  <ul className="flex flex-col gap-3">
-                    <li>
-                      <NavLink to="/dashboard/add-product">Add Product</NavLink>
-                    </li>
+            {/* ADMIN MENU */}
+            {userRole.role === "Admin" && (
+              <>
+                <p className="px-4 text-[10px] uppercase font-bold text-gray-400 mb-2">
+                  Administration
+                </p>
+                <NavLink
+                  to="/dashboard/manager-users"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <MdOutlineManageAccounts className="w-5 h-5 mr-3" /> Manager
+                  Users
+                </NavLink>
+                <NavLink
+                  to="/dashboard/buyer-users"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <HiOutlineUsers className="w-5 h-5 mr-3" /> Buyer Users
+                </NavLink>
+                <NavLink
+                  to="/dashboard/all-products"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <AiOutlineProduct className="w-5 h-5 mr-3" /> All Products
+                </NavLink>
+                <NavLink
+                  to="/dashboard/all-orders"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <BsListTask className="w-5 h-5 mr-3" /> All Orders
+                </NavLink>
+              </>
+            )}
 
-                    <li>
-                      <NavLink to="/dashboard/manage-products">
-                        Manage Products
-                      </NavLink>
-                    </li>
+            {/* MANAGER MENU */}
+            {userRole.role === "Manager" && userRole.status === "approved" && (
+              <>
+                <p className="px-4 text-[10px] uppercase font-bold text-gray-400 mb-2">
+                  Production
+                </p>
+                <NavLink
+                  to="/dashboard/add-product"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <BsBagPlus className="w-5 h-5 mr-3" /> Add Product
+                </NavLink>
+                <NavLink
+                  to="/dashboard/manage-products"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <MdOutlineManageAccounts className="w-5 h-5 mr-3" /> Manage
+                  Products
+                </NavLink>
+                <NavLink
+                  to="/dashboard/pending-orders"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <MdOutlinePendingActions className="w-5 h-5 mr-3" /> Pending
+                  Orders
+                </NavLink>
+                <NavLink
+                  to="/dashboard/approved-orders"
+                  className={({ isActive }) =>
+                    isActive ? `${normalClass} ${activeClass}` : normalClass
+                  }
+                >
+                  <BsCartCheck className="w-5 h-5 mr-3" /> Approved Orders
+                </NavLink>
+              </>
+            )}
+          </nav>
 
-                    <li>
-                      <NavLink to="/dashboard/pending-orders">
-                        Pending Orders
-                      </NavLink>
-                    </li>
+          {/* 3. Footer / User Profile */}
+          <div className="border-t border-gray-200 p-4">
+            <NavLink
+              to="/dashboard/profile"
+              className={({ isActive }) =>
+                isActive ? `${normalClass} ${activeClass}` : normalClass
+              }
+            >
+              <CgProfile className="w-5 h-5 mr-3" /> Profile
+            </NavLink>
 
-                    <li>
-                      <NavLink to="/dashboard/approved-orders">
-                        Approved Orders
-                      </NavLink>{" "}
-                    </li>
-                  </ul>
-                )}
-              {/* Common Menu */}
-              {/* <MenuItem
-                icon={BsGraphUp}
-                label="Statistics"
-                address="/dashboard"
-              /> */}
-              {/* Role-Based Menu */}
-              {/* <CustomerMenu />
-              <SellerMenu />
-              <AdminMenu /> */}
-            </nav>
-          </div>
-
-          {/* Bottom Content */}
-          <div>
-            <li className="text-center">
-              <NavLink to="/dashboard/profile">Profile</NavLink>
-            </li>
-
-            {/* <menuitem
-              icon={FcSettings}
-              label="Profile"
-              address="/dashboard/profile"
-            /> */}
             <button
               onClick={handleSignOut}
-              className="flex cursor-pointer w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
+              className="flex w-full items-center px-4 py-3 mt-2 text-red-500 hover:bg-red-50 rounded-lg transition-all duration-300"
             >
-              <span className="text-center mx-4 font-medium">Logout</span>
+              <GrLogout className="w-5 h-5 mr-3" />
+              <span className="font-medium">Logout</span>
             </button>
+
+            {/* User Info Display */}
+            <div className="mt-4 flex items-center p-2 bg-gray-50 rounded-xl">
+              <div className="avatar placeholder">
+                <div className="bg-neutral text-neutral-content rounded-full w-8">
+                  <span>{user?.displayName?.charAt(0) || "U"}</span>
+                </div>
+              </div>
+              <div className="ml-3 overflow-hidden">
+                <p className="text-xs font-bold text-gray-800 truncate">
+                  {user?.displayName}
+                </p>
+                <p className="text-[10px] text-gray-500 truncate">
+                  {userRole.role}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

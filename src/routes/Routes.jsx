@@ -23,6 +23,8 @@ import Contact from "../Pages/Contact/Contact";
 import UpdateProduct from "../Pages/UpdateProduct/UpdateProduct";
 import ManagerUsers from "../components/DashBoard/Admin/ManageUsers/ManagerUsers";
 import OrderDetails from "../Pages/OrderDetails/OrderDetails";
+import ManagerRoute from "./ManagerRoute";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -87,7 +89,9 @@ export const router = createBrowserRouter([
         path: "/dashboard/add-product",
         element: (
           <PrivateRouter>
-            <AddProduct></AddProduct>
+            <ManagerRoute>
+              <AddProduct></AddProduct>
+            </ManagerRoute>
           </PrivateRouter>
         ),
       },
@@ -103,6 +107,7 @@ export const router = createBrowserRouter([
         path: "all-products",
         element: (
           <PrivateRouter>
+            {" "}
             <AllProduct></AllProduct>
           </PrivateRouter>
         ),
@@ -111,7 +116,10 @@ export const router = createBrowserRouter([
         path: "all-orders",
         element: (
           <PrivateRouter>
-            <AllOrders></AllOrders>,
+            <AdminRoute>
+              {" "}
+              <AllOrders></AllOrders>
+            </AdminRoute>
           </PrivateRouter>
         ),
       },
@@ -119,7 +127,10 @@ export const router = createBrowserRouter([
         path: "buyer-users",
         element: (
           <PrivateRouter>
-            <ManageUsers></ManageUsers>,
+            <AdminRoute>
+              {" "}
+              <ManageUsers></ManageUsers>
+            </AdminRoute>
           </PrivateRouter>
         ),
       },
@@ -127,7 +138,10 @@ export const router = createBrowserRouter([
         path: "manager-users",
         element: (
           <PrivateRouter>
-            <ManagerUsers></ManagerUsers>
+            <AdminRoute>
+              {" "}
+              <ManagerUsers></ManagerUsers>
+            </AdminRoute>
           </PrivateRouter>
         ),
       },
@@ -135,7 +149,10 @@ export const router = createBrowserRouter([
         path: "manage-products",
         element: (
           <PrivateRouter>
-            <ManageProducts></ManageProducts>,
+            <ManagerRoute>
+              {" "}
+              <ManageProducts></ManageProducts>
+            </ManagerRoute>
           </PrivateRouter>
         ),
       },
@@ -143,7 +160,10 @@ export const router = createBrowserRouter([
         path: "pending-orders",
         element: (
           <PrivateRouter>
-            <PendingOrders></PendingOrders>,
+            <ManagerRoute>
+              {" "}
+              <PendingOrders></PendingOrders>
+            </ManagerRoute>
           </PrivateRouter>
         ),
       },
@@ -151,7 +171,9 @@ export const router = createBrowserRouter([
         path: "approved-orders",
         element: (
           <PrivateRouter>
-            <ApproveOrders></ApproveOrders>
+            <ManagerRoute>
+              <ApproveOrders></ApproveOrders>
+            </ManagerRoute>
           </PrivateRouter>
         ),
       },
